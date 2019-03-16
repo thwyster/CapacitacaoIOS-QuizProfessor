@@ -12,7 +12,6 @@ class QuestionTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         navigationItem.rightBarButtonItems?.append(editButtonItem)
-        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -44,14 +43,12 @@ class QuestionTableViewController: UITableViewController {
     
     func addQuestion(_ question : Question) {
         quiz.add(question)
+        quiz.saveData()
         
         let cell = IndexPath(row: quiz.questions.count - 1, section: 0)
         tableView.beginUpdates()
         tableView.insertRows(at: [cell], with: .bottom)
         tableView.endUpdates()
-        
-        quiz.saveData()
-        
     }
     
     func editQuestion(_ question : Question) {
@@ -60,9 +57,8 @@ class QuestionTableViewController: UITableViewController {
         quiz.questions[index!].answers[0] = question.answers[0]
         quiz.questions[index!].answers[1] = question.answers[1]
         quiz.questions[index!].answers[2] = question.answers[2]
-        self.tableView.reloadData()
-        
         quiz.saveData()
+        self.tableView.reloadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

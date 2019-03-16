@@ -5,14 +5,26 @@
 
 import Foundation
 
-class QuizViewModel: Observer {
+class QuizViewModel {
     
     private let quiz: Quiz = Quiz()
     
     private (set) var currentNumber = 0
     private (set) var score = 0
     
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Perguntas.plist")
+    let userDefaults = UserDefaults.standard
+    //record = userDefaults.integer(forKey: "record")
+    //userDefaults.set(score, forKey: "record")
+    
+    var record = 0
+    
+    var file = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Perguntas.plist")
+    
+    init() {
+        record = userDefaults.integer(forKey: "record")
+        print(record)
+        loadData()
+    }
     
     var questions : [Question] {
         return quiz.questions
@@ -32,10 +44,6 @@ class QuizViewModel: Observer {
     
     var count : Int {
         return quiz.questions.count
-    }
-    
-    init() {
-        quiz.addObserver(self)
     }
     
     func reset() {
@@ -73,32 +81,32 @@ class QuizViewModel: Observer {
         quiz.remove(number)
     }
     
-    func loadData() {
-        if let data = try? Data(contentsOf: dataFilePath!) {
-            let decoder = PropertyListDecoder()
-            do {
-                quiz.questions = try decoder.decode([Question].self, from: data)
-            } catch {
-                print("Erro bla bla: \(error)")
-            }
-            
-        }
+    func finish() {
+        //if score > record {
+            userDefaults.set(score, forKey: "record")
+        userDefaults.synchronize()
+        //}
+        //userDefaults.set(quiz.questions, forKey: "perguntas")
     }
     
     func saveData() {
-        let perguntas: [Question] = self.questions
-        
         let encoder = PropertyListEncoder()
         
         do {
-            let data = try encoder.encode(perguntas)
-            try data.write(to: dataFilePath!)
+            let dados = try encoder.encode(quiz.questions)
+            try dados.write(to: file!)
         } catch {
-            print("Erro bla bla")
+            print("Erro bla bla bla: \(error)")
         }
     }
     
-    func update() {
-        
+    func loadData() {
+        let decoder = PropertyListDecoder()
+        do {
+            let dados = try Data(contentsOf: file!)
+            quiz.questions =  try decoder.decode([Question].self, from: dados)
+        } catch {
+            print("Erro bla bla bla: \(error)")
+        }
     }
 }

@@ -5,7 +5,7 @@
 
 import Foundation
 
-class Question : Codable {
+class Question: Codable {
     var text = ""
     var answers = [String]()
 }

@@ -13,8 +13,6 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         quiz = QuizViewModel()
-        
-        quiz.loadData()
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

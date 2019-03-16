@@ -15,17 +15,9 @@ class QuizViewController: UIViewController {
     @IBOutlet weak var placar: UILabel!
     
     var quiz : QuizViewModel!
-    
-    let defaults = UserDefaults.standard
-    
-    var record = 0
 
     override func viewDidLoad() {
         showQuestion(quiz.current)
-        
-        record = defaults.integer(forKey: "record")
-        
-        print (record)
     }
     
     func showQuestion(_ question : Question) {
@@ -48,6 +40,7 @@ class QuizViewController: UIViewController {
     func message() {
         let action = UIAlertAction(title: "Continuar",
                      style: .default) { (action) in
+            self.quiz.finish()
             self.quiz.reset()
             self.navigationController?.popViewController(animated: true)
         }
@@ -58,7 +51,6 @@ class QuizViewController: UIViewController {
         alert.addAction(action)
         
         self.present(alert, animated: true) {
-            self.saveUserDefaults()
         }
     }
     
@@ -69,7 +61,4 @@ class QuizViewController: UIViewController {
         self.next()
     }
     
-    func saveUserDefaults() {
-        defaults.set(self.quiz.score, forKey: "record")
-    }
 }

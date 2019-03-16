@@ -5,16 +5,11 @@
 
 import Foundation
 
-protocol Observer {
-    func update()
-}
 
 class Quiz {
     let correct = 2   // A questão correta sempre é a última cadastrada
     
-    var observer: Observer?
-    
-    //private (set) var questions: [Question]
+    /*private (set)*/
     var questions: [Question]
 //    {
 //        willSet
@@ -38,10 +33,6 @@ class Quiz {
     
     func remove(_ number : Int) {
         questions.remove(at: number)
-    }
-    
-    func addObserver(_ observer: Observer) {
-        self.observer = observer
     }
     
     init() {
